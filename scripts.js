@@ -1,35 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // --- Variáveis e carrossel ---
   const slides = document.querySelectorAll(".slide");
   const dotsContainer = document.querySelector(".dots-container");
   const totalDots = 5;
   let currentSlide = 0;
   let autoPlayInterval;
+  let startX = 0;
+  let endX = 0;
+  const slideContainer = document.querySelector(".slides");
 
-function showSlide(index) {
-  slides.forEach((slide, i) => {
-  slide.style.display = (i === index) ? "block" : "none";
-  // Esconde a legenda de todos os slides
-  const caption = slide.querySelector('.caption');
-  if (caption) caption.style.display = "none";
-  document.querySelectorAll('.nav-botoes a').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const targetId = this.getAttribute('href').replace('#', '');
-  
-      // Remove 'active' de todas as seções
-      document.querySelectorAll('.sessao').forEach(sec => sec.classList.remove('active'));
-      const targetSection = document.getElementById(targetId);
-      if (targetSection) targetSection.classList.add('active');
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.style.display = (i === index) ? "block" : "none";
+      // Esconde a legenda de todos os slides
+      const caption = slide.querySelector('.caption');
+      if (caption) caption.style.display = "none";
     });
-  });  });
 
-  // Após exibir o slide, exibe a legenda apenas do slide atual
-  const currentCaption = slides[index].querySelector('.caption');
-  if (currentCaption) currentCaption.style.display = "block";
+    // Após exibir o slide, exibe a legenda apenas do slide atual
+    const currentCaption = slides[index].querySelector('.caption');
+    if (currentCaption) currentCaption.style.display = "block";
 
-  updateDots(index);
-  currentSlide = index;
-}
+    updateDots(index);
+    currentSlide = index;
+  }
 
   function updateDots(startIndex) {
     dotsContainer.innerHTML = "";
@@ -71,12 +65,73 @@ function showSlide(index) {
     startAutoPlay();
   }
 
+  // --- SWIPE TOUCH EVENTS ---
+  if (slideContainer) {
+    slideContainer.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+    });
+
+    slideContainer.addEventListener("touchend", (e) => {
+      endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      if (Math.abs(diff) > 50) { // Sensibilidade mínima para swipe
+        if (diff > 0) {
+          // Swipe para esquerda - próximo slide
+          const newIndex = (currentSlide + 1) % slides.length;
+          showSlide(newIndex);
+        } else {
+          // Swipe para direita - slide anterior
+          const newIndex = (currentSlide - 1 + slides.length) % slides.length;
+          showSlide(newIndex);
+        }
+        resetAutoPlay();
+      }
+    });
+  }
+  // --- FIM SWIPE ---
+
   // Inicia carrossel
   updateDots(0);
   showSlide(currentSlide);
   startAutoPlay();
+
+  // --- Banner de Cookies ---
+  const banner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('accept-cookies');
+  const rejectBtn = document.getElementById('reject-cookies');
+
+  if (!localStorage.getItem('cookiesChoice')) {
+    banner.style.display = 'block';
+  }
+
+  acceptBtn.addEventListener('click', () => {
+    localStorage.setItem('cookiesChoice', 'accepted');
+    banner.style.display = 'none';
+  });
+
+  rejectBtn.addEventListener('click', () => {
+    localStorage.setItem('cookiesChoice', 'rejected');
+    banner.style.display = 'none';
+  });
+
+  // --- Alternância de idiomas ---
+  document.querySelectorAll(".pt").forEach(el => el.style.display = "");
+  document.querySelectorAll(".en").forEach(el => el.style.display = "none");
+
+  // --- Alternância de seções ao clicar nos botões ---
+  document.querySelectorAll('.nav-botoes a').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href').replace('#', '');
+
+      document.querySelectorAll('.sessao').forEach(sec => sec.classList.remove('active'));
+      const targetSection = document.getElementById(targetId);
+      if (targetSection) targetSection.classList.add('active');
+    });
+  });
 });
 
+// --- Função para reorganizar sessões no mobile ---
 function rearrangeSectionsMobile() {
   const largura = window.innerWidth;
   const colunaEsquerda = document.querySelector('.coluna-esquerda');
@@ -99,55 +154,6 @@ function rearrangeSectionsMobile() {
   }
 }
 
-
-// Roda na carga da página
+// Eventos para reorganizar ao carregar e redimensionar
 window.addEventListener('load', rearrangeSectionsMobile);
-// Roda também quando a tela é redimensionada
 window.addEventListener('resize', rearrangeSectionsMobile);
-
-// Banner de Cookies
-document.addEventListener("DOMContentLoaded", function() {
-  const banner = document.getElementById('cookie-banner');
-  const acceptBtn = document.getElementById('accept-cookies');
-  const rejectBtn = document.getElementById('reject-cookies');
-
-  if (!localStorage.getItem('cookiesChoice')) {
-    banner.style.display = 'block';
-  }
-
-  acceptBtn.addEventListener('click', function() {
-    localStorage.setItem('cookiesChoice', 'accepted');
-    banner.style.display = 'none';
-    // Aqui você pode ativar scripts de anúncios/personalização
-  });
-
-  rejectBtn.addEventListener('click', function() {
-    localStorage.setItem('cookiesChoice', 'rejected');
-    banner.style.display = 'none';
-    // Aqui você pode bloquear scripts de anúncios/personalização
-  });
-});
-document.querySelectorAll('.nav-botoes a').forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('href').replace('#', '');
-
-    // Remove 'active' de todas as sessões
-    document.querySelectorAll('.sessao').forEach(sec => sec.classList.remove('active'));
-
-    // Adiciona 'active' apenas à sessão correspondente
-    const targetSection = document.getElementById(targetId);
-    if (targetSection) targetSection.classList.add('active');
-  });
-})
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".pt").forEach(el => el.style.display = "");
-  document.querySelectorAll(".en").forEach(el => el.style.display = "none");
-});
-
-document.querySelectorAll(".pt").forEach(el => el.style.display = "");
-  document.querySelectorAll(".en").forEach(el => el.style.display = "none");
-
- 
