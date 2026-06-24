@@ -431,7 +431,9 @@ main {
 }
 
 .shop-container a {
-  text-decoration: none;
+  flex: 0 1 320px; /* todos os cards terão a mesma largura */
+  display: flex;
+  justify-content: center;
 }
 
 .shop-image {
@@ -491,7 +493,7 @@ main {
   top: -20px;
 }
 
-.sessao.portfolio {
+.sessao.galeria {
   padding: 20px;
   margin: 25px 20px 0 20px;
   background-color: #0a0a0a48;
@@ -508,7 +510,7 @@ main {
   text-align: center;
 }
 
-.portfolio .decor-line {
+.galeria .decor-line {
   width: 100%;
   height: 1.8px;
   background: linear-gradient(to right, #2c0a0a, #720000, #2c0a0a);
@@ -519,7 +521,7 @@ main {
   /* opcional: mais controle fino */
 }
 
-.portfolio h2 {
+.galeria h2 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
   color: #7b0000;
@@ -880,8 +882,8 @@ figure {
   right: 10px;
 }
 
-.sessao.portfolio:not(.active) .prev,
-.sessao.portfolio:not(.active) .next {
+.sessao.galeria:not(.active) .prev,
+.sessao.galeria:not(.active) .next {
   opacity: 0;
   pointer-events: none;
 }
@@ -948,7 +950,7 @@ figure {
   .sobre,
   .sessao.contato,
   .sessao.shop,
-  .sessao.portfolio {
+  .sessao.galeria {
     margin: 25px 20px;
     padding: 5px 10px;
     background-color: #0a0a0a48;
@@ -959,11 +961,23 @@ figure {
     width: 90vw;
   }
 
-  .sessao.portfolio {
+  .sessao.galeria {
     padding: 20px;
   }
+.shop-container a {
+    width: 100%;
+    display: block;
+    justify-content: center;
+    margin: 0 !important; /* remove margens extras */
+    flex-direction: column;
+    gap: 30px;
+    flex-wrap: nowrap;
+  }
 
-  #portfolio .decor-line {
+  
+
+
+  #galeria .decor-line {
     margin: 0 !important;
     padding: 0 !important;
     position: static !important;
@@ -1134,7 +1148,7 @@ figure {
 /* 💻 Tablets (entre 769px e 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
 
-  .sessao.portfolio,
+  .sessao.galeria,
   .sobre,
   .sessao.contato,
   .sessao.shop {
@@ -1152,7 +1166,7 @@ figure {
 /* 🖥️ Desktops grandes (acima de 1024px) */
 @media (min-width: 1025px) {
 
-  .sessao.portfolio,
+  .sessao.galeria,
   .sobre,
   .sessao.contato,
   .sessao.shop {

@@ -135,21 +135,21 @@ document.addEventListener("DOMContentLoaded", () => {
 function rearrangeSectionsMobile() {
   const largura = window.innerWidth;
   const colunaEsquerda = document.querySelector('.coluna-esquerda');
-  const portfolio = document.querySelector('#portfolio');
+  const galeria = document.querySelector('#galeria');
   const sobre = document.querySelector('#sobre');
   const contato = document.querySelector('#contato');
 
-  if (largura <= 768 && colunaEsquerda && portfolio && sobre && contato) {
-    // Se o portfolio ainda não estiver dentro da coluna-esquerda, move ele
-    if (!colunaEsquerda.contains(portfolio)) {
-      // Move o portfolio para depois do sobre, antes do contato
-      colunaEsquerda.insertBefore(portfolio, contato);
+  if (largura <= 768 && colunaEsquerda && galeria && sobre && contato) {
+    // Se a galeria ainda não estiver dentro da coluna-esquerda, move ela
+    if (!colunaEsquerda.contains(galeria)) {
+      // Move a galeria para depois do sobre, antes do contato
+      colunaEsquerda.insertBefore(galeria, contato);
     }
   } else {
-    // Se for desktop, e o portfolio estiver dentro da coluna-esquerda, volta para a coluna-direita
+    // Se for desktop, e a galeria estiver dentro da coluna-esquerda, volta para a coluna-direita
     const colunaDireita = document.querySelector('.coluna-direita');
-    if (colunaDireita && colunaEsquerda.contains(portfolio)) {
-      colunaDireita.appendChild(portfolio);
+    if (colunaDireita && colunaEsquerda.contains(galeria)) {
+      colunaDireita.appendChild(galeria);
     }
   }
 }
